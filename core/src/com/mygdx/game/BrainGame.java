@@ -32,6 +32,7 @@ public class BrainGame extends Game{
 	Random rand;
 	int tmpposlist;
 	int tmp;
+	int status;
 	Color tmpcolor1;
 	Color tmpcolor2;
 	Color tmpcolor3;
@@ -43,7 +44,7 @@ public class BrainGame extends Game{
 		batch = new SpriteBatch();
 		setScreen(new GameScreen(this));
 		shape = new ShapeRenderer();
-		
+		status = 0;
 		font = new BitmapFont();
 		font.getData().setScale(2);
 		font.setColor(1, 1, 1, 1);
@@ -142,7 +143,7 @@ public class BrainGame extends Game{
 		batch.begin();
 		
 		font.draw(batch, printName[0], 180, 320);
-		//font.draw(batch, printName[1], 340, 320);
+		font.draw(batch, printName[1], 340, 320);
 		//font.draw(batch, printName[2], 180, 500);
 		//font.draw(batch, printName[3], 340, 500);
 		//font.draw(batch, "Time 00:00:00", 380, 750);
@@ -153,28 +154,35 @@ public class BrainGame extends Game{
 		//System.out.println(x);
 		
 		if(Gdx.input.getX() > 160 && Gdx.input.getX() < 290 && Gdx.input.getY() < 380 && Gdx.input.getY() > 250) {
-			if(Gdx.input.isTouched()) {
+			if(Gdx.input.isTouched()&&status == 0) {
+				status=1;
 				System.out.println("touched1");
 				randcolor();
 			}
 		}
 		else if(Gdx.input.getX() > 320 && Gdx.input.getX() < 450 && Gdx.input.getY() < 380 && Gdx.input.getY() > 250) {
-			if(Gdx.input.isTouched()) {
+			if(Gdx.input.isTouched()&&status == 0) {
+				status=1;
 				System.out.println("touched2");
 				randcolor();
 			}
 		}
 		else if(Gdx.input.getX() > 160 && Gdx.input.getX() < 290 && Gdx.input.getY() < 550 && Gdx.input.getY() > 420) {
-			if(Gdx.input.isTouched()) {
+			if(Gdx.input.isTouched()&&status == 0) {
 				System.out.println("touched3");
+				status=1;
 				randcolor();
 			}
 		}
 		else if(Gdx.input.getX() > 320 && Gdx.input.getX() < 450 && Gdx.input.getY() < 550 && Gdx.input.getY() > 420) {
-			if(Gdx.input.isTouched()) {
+			if(Gdx.input.isTouched()&&status == 0) {
 				System.out.println("touched4");
+				status=1;
 				randcolor();
 			}
+		}
+		if(!Gdx.input.isTouched()) {
+			status = 0;
 		}
 	}
 	
