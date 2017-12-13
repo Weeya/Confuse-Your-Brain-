@@ -25,9 +25,11 @@ public class BrainGame extends Game{
 	ShapeRenderer shape;
 	BitmapFont font;
 	
-	List<Color> listcolor;
+	Color[] listcolor;
+	Color[] printColor;
 	String[] colorName;
 	String[] printName;
+	
 	String name;
 	Random rand;
 	int tmpposlist;
@@ -53,19 +55,20 @@ public class BrainGame extends Game{
 		
 		//code of dondon
 		rand  = new Random();
-		listcolor = new ArrayList();
+		listcolor = new Color[6];
 		colorName = new String[6];
 		printName = new String[6];
+		printColor = new Color[6];
 		
-		listcolor.add(Color.SALMON);
+		listcolor[0]= Color.SALMON;
 		colorName[0] = "salmon";
-		listcolor.add(Color.LIME);
+		listcolor[1] = Color.LIME;
 		colorName[1] = "lime";
-		listcolor.add(Color.PINK);
+		listcolor[2] = Color.PINK;
 		colorName[2] = "pink";
-		listcolor.add(Color.NAVY);
+		listcolor[3] = Color.NAVY;
 		colorName[3] = "navy";
-		listcolor.add(Color.ORANGE);
+		listcolor[4] = Color.ORANGE;
 		colorName[4] = "orange";
 		//listcolor.add(Color.SCARLET);
 		//listcolor.add(Color.ORANGE);
@@ -75,52 +78,48 @@ public class BrainGame extends Game{
 		
 	}
 	public void randcolor() {
-		tmpposlist = rand.nextInt(listcolor.size());
-		tmpcolor1 = listcolor.get(tmpposlist);
-		listcolor.remove(tmpposlist);
-		tmp = tmpposlist-1 ; //
-		System.out.println(tmpposlist); //
+		tmpposlist = rand.nextInt(listcolor.length-1);
+		printColor[0] = listcolor[tmpposlist];
 		name = colorName[tmpposlist]; 
-		printName[0] = name;
-		System.out.println(name);//
+		printName[0] = name; 
+		listcolor[tmpposlist] = Color.BLACK;
 		
-		tmpposlist = rand.nextInt(listcolor.size());
-		tmpcolor2 = listcolor.get(tmpposlist);
-		listcolor.remove(tmpposlist);
-		tmp = tmpposlist-1 ;
-		System.out.println(tmpposlist);
+		tmpposlist = rand.nextInt(listcolor.length-1);
+		while(listcolor[tmpposlist] == Color.BLACK) {
+			tmpposlist = rand.nextInt(listcolor.length-1);
+		}
+		printColor[1] = listcolor[tmpposlist];
 		name = colorName[tmpposlist];
 		printName[1] = name;
-		System.out.println(name);
+		listcolor[tmpposlist] = Color.BLACK;
 		
-		tmpposlist = rand.nextInt(listcolor.size());
-		tmpcolor3 = listcolor.get(tmpposlist);
-		listcolor.remove(tmpposlist);
-		tmp = tmpposlist-1 ; //
-		System.out.println(tmpposlist); //
+		tmpposlist = rand.nextInt(listcolor.length-1);
+		while(listcolor[tmpposlist] == Color.BLACK) {
+			tmpposlist = rand.nextInt(listcolor.length-1);
+		}
+		printColor[2] = listcolor[tmpposlist];
 		name = colorName[tmpposlist];
 		printName[2] = name;
-		System.out.println(name);//
+		listcolor[tmpposlist] = Color.BLACK;
 		
-		
-		tmpposlist = rand.nextInt(listcolor.size());
-		tmpcolor4 = listcolor.get(tmpposlist);
-		listcolor.remove(tmpposlist);
-		tmp = tmpposlist-1 ; //
-		System.out.println(tmpposlist); //
+		tmpposlist = rand.nextInt(listcolor.length-1);
+		while(listcolor[tmpposlist] == Color.BLACK) {
+			tmpposlist = rand.nextInt(listcolor.length-1);
+		}
+		printColor[3] = listcolor[tmpposlist];
 		name = colorName[tmpposlist];
 		printName[3] = name;
-		System.out.println(name);//
 		
-		
-		tmpcolor5 = listcolor.get(rand.nextInt(listcolor.size()));
-		listcolor.remove(tmpcolor5);
-		
-		listcolor.add(Color.SALMON);
-		listcolor.add(Color.LIME);
-		listcolor.add(Color.PINK);
-		listcolor.add(Color.NAVY);
-		listcolor.add(Color.ORANGE);
+		listcolor[0]= Color.SALMON;
+		//colorName[0] = "salmon";
+		listcolor[1] = Color.LIME;
+		//colorName[1] = "lime";
+		listcolor[2] = Color.PINK;
+		//colorName[2] = "pink";
+		listcolor[3] = Color.NAVY;
+		//colorName[3] = "navy";
+		listcolor[4] = Color.ORANGE;
+		//colorName[4] = "orange";
 	}
 	
 	public void render () {
@@ -129,13 +128,13 @@ public class BrainGame extends Game{
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	
 		shape.begin(ShapeType.Filled);
-		shape.setColor(tmpcolor1);
+		shape.setColor(printColor[0]);
 		shape.rect(160, 250, 130, 130); // posX1 = 160, posY1 = 250
-		shape.setColor(tmpcolor2);
+		shape.setColor(printColor[1]);
 		shape.rect(320, 250, 130, 130); // posX2 = 320, posY2 = 250
-		shape.setColor(tmpcolor3);
+		shape.setColor(printColor[2]);
 		shape.rect(160, 420, 130, 130); // posX3 = 160, posY1 = 420
-		shape.setColor(tmpcolor4);
+		shape.setColor(printColor[3]);
 		shape.rect(320, 420, 130, 130); // posX4 = 320, posY1 = 420
 		shape.end();
 			
@@ -144,39 +143,33 @@ public class BrainGame extends Game{
 		
 		font.draw(batch, printName[0], 180, 320);
 		font.draw(batch, printName[1], 340, 320);
-		//font.draw(batch, printName[2], 180, 500);
-		//font.draw(batch, printName[3], 340, 500);
-		//font.draw(batch, "Time 00:00:00", 380, 750);
+		font.draw(batch, printName[2], 180, 500);
+		font.draw(batch, printName[3], 340, 500);
+		font.draw(batch, "Time 00:00:00", 380, 750);
 		
 		
 		batch.end();
 		
-		//System.out.println(x);
-		
 		if(Gdx.input.getX() > 160 && Gdx.input.getX() < 290 && Gdx.input.getY() < 380 && Gdx.input.getY() > 250) {
 			if(Gdx.input.isTouched()&&status == 0) {
 				status=1;
-				System.out.println("touched1");
 				randcolor();
 			}
 		}
 		else if(Gdx.input.getX() > 320 && Gdx.input.getX() < 450 && Gdx.input.getY() < 380 && Gdx.input.getY() > 250) {
 			if(Gdx.input.isTouched()&&status == 0) {
 				status=1;
-				System.out.println("touched2");
 				randcolor();
 			}
 		}
 		else if(Gdx.input.getX() > 160 && Gdx.input.getX() < 290 && Gdx.input.getY() < 550 && Gdx.input.getY() > 420) {
 			if(Gdx.input.isTouched()&&status == 0) {
-				System.out.println("touched3");
 				status=1;
 				randcolor();
 			}
 		}
 		else if(Gdx.input.getX() > 320 && Gdx.input.getX() < 450 && Gdx.input.getY() < 550 && Gdx.input.getY() > 420) {
 			if(Gdx.input.isTouched()&&status == 0) {
-				System.out.println("touched4");
 				status=1;
 				randcolor();
 			}
