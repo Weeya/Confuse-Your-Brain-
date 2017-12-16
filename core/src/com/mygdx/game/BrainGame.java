@@ -27,6 +27,7 @@ public class BrainGame extends Game{
 	
 	Color[] listcolor,printColor;
 	String[] colorName,printName;
+	int[] colorIndex;
 	
 	String name;
 	Random rand;
@@ -50,6 +51,7 @@ public class BrainGame extends Game{
 		colorName = new String[9];
 		printName = new String[9];
 		printColor = new Color[9];
+		colorIndex = new int[9];
 		
 		listcolor[0]= Color.YELLOW;
 		colorName[0] = "Yellow";
@@ -96,11 +98,15 @@ public class BrainGame extends Game{
 		while(listcolor[tmpposlist] == Color.WHITE) {
 			tmpposlist = rand.nextInt(listcolor.length-1);
 		}
-		printColor[order] = listcolor[tmpposlist];
-		name = colorName[tmpposlist];
-		printName[order] = name;
+		//printColor[order] = listcolor[tmpposlist];
+		//name = colorName[tmpposlist];
+		//printName[order] = name;
+		//listcolor[tmpposlist] = Color.WHITE;
+		
+		printColor[order] = listcolor[tmpposlist]; //color
+		colorIndex[order] = tmpposlist;
 		listcolor[tmpposlist] = Color.WHITE;
-	}
+	} 
 	public void render () {
 		
 		Gdx.gl.glClearColor(1,1,1,1); 
@@ -120,7 +126,7 @@ public class BrainGame extends Game{
 		
 		textPrintFunc(0,180,320,pos);
 		textPrintFunc(1,340,320,pos);
-		textPrintFunc(2,180,500,pos);
+		textPrintFunc(2,180,500,pos); 
 		textPrintFunc(3,340,500,pos);
 		font.draw(batch, "Time 00:00:00", 380, 750);
 		
@@ -162,29 +168,43 @@ public class BrainGame extends Game{
 	 
 	public void textPrintFunc(int order, int x, int y, int position) {
 		if(order != position) { 
-			font.draw(batch, printName[order], x, y); 
+			font.draw(batch, colorName[colorIndex[order]], x, y); 
 			//System.out.println("..");
 		} 
-		else { // order == position
+		else { // order == position 
 			if(alreadyChecked==1) {
-				font.draw(batch, printName[newColorName], x, y);
+				font.draw(batch, colorName[newColorName], x, y);
 			}
 			else { 
-				newColorName = falseColorName(order,position);
-				font.draw(batch, printName[newColorName], x, y);
+				newColorName = falseColorName();
+				font.draw(batch, colorName[newColorName], x, y);
 				alreadyChecked = 1;
-			}
+			} 
 			System.out.println("False " + order);
 		} 
 	}
-	
-	public int falseColorName(int order,int position) {
-		order = rand.nextInt(4);
-		while(order == position) {
-			order = rand.nextInt(4);
-		} 
-			
+	  
+	public int falseColorName() { 
+		
+		int order;
+		order = rand.nextInt(8);
+		while(check(order)==0) {
+			order = rand.nextInt(8);
+		}
+		System.out.println("order " + order + "index " + colorIndex[order]);
 		return order;
+	} 
+	 
+	public int check(int order) {
+		if(order == colorIndex[0])
+			return 0;
+		else if (order == colorIndex[1])
+			return 0;
+		else if (order == colorIndex[2])
+			return 0;
+		else if (order == colorIndex[3])
+			return 0;
+		return 1;
 	}
 	@Override
 	public void dispose () {
