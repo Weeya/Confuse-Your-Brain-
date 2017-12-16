@@ -26,16 +26,17 @@ public class BrainGame extends Game{
 	BitmapFont font;
 	
 	Color[] listcolor,printColor;
-	String[] colorName,printName;
+	String[] colorName;
 	int[] colorIndex;
 	
 	String name;
 	Random rand;
-	int tmpposlist, pos, status, alreadyChecked,newColorName;
+	int x0 = 160, x1 = 320, y0 = 250, y1 = 420, rectSize = 130; 
+	int tmpposlist, pos, status, alreadyChecked,newColorName,score;
 	
 	@Override
 	public void create () {
-		 
+		
 		batch = new SpriteBatch();
 		setScreen(new GameScreen(this));
 		shape = new ShapeRenderer();
@@ -49,13 +50,12 @@ public class BrainGame extends Game{
 		rand  = new Random(); 
 		listcolor = new Color[9];
 		colorName = new String[9];
-		printName = new String[9];
 		printColor = new Color[9];
 		colorIndex = new int[9];
 		
 		listcolor[0]= Color.YELLOW;
-		colorName[0] = "Yellow";
-		listcolor[1] = Color.PURPLE;
+		colorName[0] = "Yellow"; 
+		listcolor[1] = Color.PURPLE; 
 		colorName[1] = "Purple"; 
 		listcolor[2] = Color.PINK; 
 		colorName[2] = "  Pink";
@@ -67,15 +67,15 @@ public class BrainGame extends Game{
 		colorName[5] = "Green"; 
 		listcolor[6] = Color.SCARLET; 
 		colorName[6] = "  Red";
-		listcolor[7] = Color.BLACK;
-		colorName[7] = "Black";
-		colorName[8] = "White";
+		listcolor[7] = Color.WHITE;
+		colorName[7] = "White";
+		colorName[8] = "Black";
 		randcolor();
 				
 	}
 	public void randcolor() {  
 		
-		colorPrintFunc(0,listcolor);
+		colorPrintFunc(0,listcolor); 
 		colorPrintFunc(1,listcolor);
 		colorPrintFunc(2,listcolor); 
 		colorPrintFunc(3,listcolor);
@@ -87,7 +87,7 @@ public class BrainGame extends Game{
 		listcolor[4] = Color.ORANGE;
 		listcolor[5] = Color.LIME; 
 		listcolor[6] = Color.SCARLET;
-		listcolor[7] = Color.BLACK;
+		listcolor[7] = Color.WHITE;
 
 		pos = rand.nextInt(4); //False position
 	}
@@ -95,70 +95,92 @@ public class BrainGame extends Game{
 	public void colorPrintFunc (int order,Color[] listcolor) {
 		
 		tmpposlist = rand.nextInt(listcolor.length-1);
-		while(listcolor[tmpposlist] == Color.WHITE) {
+		while(listcolor[tmpposlist] == Color.BLACK) {
 			tmpposlist = rand.nextInt(listcolor.length-1);
 		}
-		//printColor[order] = listcolor[tmpposlist];
-		//name = colorName[tmpposlist];
-		//printName[order] = name;
-		//listcolor[tmpposlist] = Color.WHITE;
-		
 		printColor[order] = listcolor[tmpposlist]; //color
 		colorIndex[order] = tmpposlist;
-		listcolor[tmpposlist] = Color.WHITE;
+		listcolor[tmpposlist] = Color.BLACK; 
 	} 
 	public void render () {
 		
-		Gdx.gl.glClearColor(1,1,1,1); 
+		Gdx.gl.glClearColor(0,0,0,1); 
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); 
 	
+		//int x0 = 160, x1 = 320, y0 = 250, y1 = 420, rectSize = 130;
 		shape.begin(ShapeType.Filled);
 		shape.setColor(printColor[0]);
-		shape.rect(160, 250, 130, 130); // posX1 = 160, posY1 = 250
+		shape.rect(x0, y0, rectSize, rectSize); 
 		shape.setColor(printColor[1]);
-		shape.rect(320, 250, 130, 130); // posX2 = 320, posY2 = 250
+		shape.rect(x1, y0, rectSize, rectSize); 
 		shape.setColor(printColor[2]);
-		shape.rect(160, 420, 130, 130); // posX3 = 160, posY1 = 420
+		shape.rect(x0, y1, rectSize, rectSize);  
 		shape.setColor(printColor[3]);
-		shape.rect(320, 420, 130, 130); // posX4 = 320, posY1 = 420
+		shape.rect(x1, y1, rectSize, rectSize); 
 		shape.end();
 		batch.begin();
-		
-		textPrintFunc(0,180,320,pos);
-		textPrintFunc(1,340,320,pos);
-		textPrintFunc(2,180,500,pos); 
-		textPrintFunc(3,340,500,pos);
+		  
+		textPrintFunc(0,x0+20,y0+80,pos);
+		textPrintFunc(1,x1+20,y0+80,pos);
+		textPrintFunc(2,x0+20,y1+80,pos); 
+		textPrintFunc(3,x1+20,y1+80,pos);
 		font.draw(batch, "Time 00:00:00", 380, 750);
-		
-		
+		font.draw(batch, "score  " + score, 380, 700);
 		batch.end();
 		
-		if(Gdx.input.getX() > 160 && Gdx.input.getX() < 290 && Gdx.input.getY() < 380 && Gdx.input.getY() > 250) {
+		//click 2
+		if(Gdx.input.getX() > x0 && Gdx.input.getX() < x0+rectSize && Gdx.input.getY() < y0+rectSize && Gdx.input.getY() > y0) {
 			if(Gdx.input.isTouched()&&status == 0) {
+				if(pos == 2) 
+					score++;
+				else
+					score--;
 				status=1;
 				randcolor();
-				alreadyChecked = 0;
+				alreadyChecked = 0;  
+				
 			}
 		}
-		else if(Gdx.input.getX() > 320 && Gdx.input.getX() < 450 && Gdx.input.getY() < 380 && Gdx.input.getY() > 250) {
+		//click 3
+		else if(Gdx.input.getX() > x1 && Gdx.input.getX() < x1+rectSize && Gdx.input.getY() < y0+rectSize && Gdx.input.getY() > y0) {
 			if(Gdx.input.isTouched()&&status == 0) {
+				if(pos == 3) 
+					score++;
+				else
+					score--;
 				status=1; 
 				randcolor(); 
-				alreadyChecked = 0;
-			}  
+				alreadyChecked = 0; 
+				
+				
+			}   
 		} 
-		else if(Gdx.input.getX() > 160 && Gdx.input.getX() < 290 && Gdx.input.getY() < 550 && Gdx.input.getY() > 420) {
+		//click 0
+		else if(Gdx.input.getX() > x0 && Gdx.input.getX() < x0+rectSize && Gdx.input.getY() < y1+rectSize && Gdx.input.getY() > y1) {
 			if(Gdx.input.isTouched()&&status == 0) {
+				if(pos == 0)  
+					score++;
+				else
+					score--;
 				status=1;
 				randcolor();
 				alreadyChecked = 0;
+				
+				
 			}
 		}
-		else if(Gdx.input.getX() > 320 && Gdx.input.getX() < 450 && Gdx.input.getY() < 550 && Gdx.input.getY() > 420) {
+		//click 1
+		else if(Gdx.input.getX() > x1 && Gdx.input.getX() < x1+rectSize && Gdx.input.getY() < y1+rectSize && Gdx.input.getY() > y1) {
 			if(Gdx.input.isTouched()&&status == 0) { 
+				if(pos == 1) 
+					score++;
+				else
+					score--;
 				status=1;
 				randcolor(); 
 				alreadyChecked = 0; 
+				
+				
 			} 
 		}
 		if(!Gdx.input.isTouched()) {
@@ -169,7 +191,6 @@ public class BrainGame extends Game{
 	public void textPrintFunc(int order, int x, int y, int position) {
 		if(order != position) { 
 			font.draw(batch, colorName[colorIndex[order]], x, y); 
-			//System.out.println("..");
 		} 
 		else { // order == position 
 			if(alreadyChecked==1) {
@@ -187,24 +208,24 @@ public class BrainGame extends Game{
 	public int falseColorName() { 
 		
 		int order;
-		order = rand.nextInt(8);
+		order = rand.nextInt(listcolor.length);
 		while(check(order)==0) {
-			order = rand.nextInt(8);
+			order = rand.nextInt(listcolor.length);
 		}
-		System.out.println("order " + order + "index " + colorIndex[order]);
+		//System.out.println("order " + order + "index " + colorIndex[order]);
 		return order;
 	} 
 	 
 	public int check(int order) {
 		if(order == colorIndex[0])
 			return 0;
-		else if (order == colorIndex[1])
+		else if (order == colorIndex[1]) 
 			return 0;
 		else if (order == colorIndex[2])
 			return 0;
 		else if (order == colorIndex[3])
 			return 0;
-		return 1;
+		return 1; 
 	}
 	@Override
 	public void dispose () {
