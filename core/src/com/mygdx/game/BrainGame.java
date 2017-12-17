@@ -25,7 +25,7 @@ public class BrainGame extends Game{
 	ShapeRenderer shape;
 	BitmapFont font;
 	
-	Color[] listcolor,printColor;
+	Color[] listcolor,printColor; 
 	String[] colorName;
 	int[] colorIndex;
 	
@@ -33,10 +33,10 @@ public class BrainGame extends Game{
 	Random rand;
 	int x0 = 160, x1 = 320, y0 = 250, y1 = 420, rectSize = 130; 
 	int tmpposlist, pos, status, alreadyChecked,newColorName,score;
-	
+	float totalTime = 10;
 	@Override
 	public void create () {
-		
+		 
 		batch = new SpriteBatch();
 		setScreen(new GameScreen(this));
 		shape = new ShapeRenderer();
@@ -69,7 +69,7 @@ public class BrainGame extends Game{
 		colorName[6] = "  Red";
 		listcolor[7] = Color.WHITE;
 		colorName[7] = "White";
-		colorName[8] = "Black";
+		colorName[8] = "Black"; 
 		randcolor();
 				
 	}
@@ -107,9 +107,15 @@ public class BrainGame extends Game{
 		Gdx.gl.glClearColor(0,0,0,1); 
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); 
 	
+		float deltaTime = Gdx.graphics.getDeltaTime();
+		totalTime -= deltaTime;
+		
+		int minutes = ((int)totalTime) / 60;
+		int seconds = ((int)totalTime) % 60;
+		
 		//int x0 = 160, x1 = 320, y0 = 250, y1 = 420, rectSize = 130;
 		shape.begin(ShapeType.Filled);
-		shape.setColor(printColor[0]);
+		shape.setColor(printColor[0]); 
 		shape.rect(x0, y0, rectSize, rectSize); 
 		shape.setColor(printColor[1]);
 		shape.rect(x1, y0, rectSize, rectSize); 
@@ -124,7 +130,7 @@ public class BrainGame extends Game{
 		textPrintFunc(1,x1+20,y0+80,pos);
 		textPrintFunc(2,x0+20,y1+80,pos); 
 		textPrintFunc(3,x1+20,y1+80,pos);
-		font.draw(batch, "Time 00:00:00", 380, 750);
+		font.draw(batch, "seconds " + seconds, 380, 750);
 		font.draw(batch, "score  " + score, 380, 700);
 		batch.end();
 		
@@ -138,7 +144,6 @@ public class BrainGame extends Game{
 				status=1;
 				randcolor();
 				alreadyChecked = 0;  
-				
 			}
 		}
 		//click 3
@@ -150,9 +155,7 @@ public class BrainGame extends Game{
 					score--;
 				status=1; 
 				randcolor(); 
-				alreadyChecked = 0; 
-				
-				
+				alreadyChecked = 0; 	
 			}   
 		} 
 		//click 0
@@ -165,8 +168,6 @@ public class BrainGame extends Game{
 				status=1;
 				randcolor();
 				alreadyChecked = 0;
-				
-				
 			}
 		}
 		//click 1
@@ -179,13 +180,12 @@ public class BrainGame extends Game{
 				status=1;
 				randcolor(); 
 				alreadyChecked = 0; 
-				
-				
 			} 
 		}
 		if(!Gdx.input.isTouched()) {
 			status = 0;  
 		}  
+		checkedTime(seconds);
 	}  
 	 
 	public void textPrintFunc(int order, int x, int y, int position) {
@@ -217,20 +217,24 @@ public class BrainGame extends Game{
 	} 
 	 
 	public int check(int order) {
-		if(order == colorIndex[0])
-			return 0;
-		else if (order == colorIndex[1]) 
-			return 0;
-		else if (order == colorIndex[2])
-			return 0;
-		else if (order == colorIndex[3])
+		if(order == colorIndex[0] || order == colorIndex[1] || order == colorIndex[2] || order == colorIndex[3])
 			return 0;
 		return 1; 
+	}
+	
+	public void checkedTime(int seconds) {
+		if(seconds == 0) {
+			System.out.println(".....Time out.... ");
+			shape.begin(ShapeType.Filled);
+			shape.setColor(Color.BLACK); 
+			shape.rect(0, 0, 800, 800); 
+			shape.end();
+			Gdx.app.exit();
+		}
 	}
 	@Override
 	public void dispose () {
 		batch.dispose(); 
 		font.dispose();
 	}
-	
 }
