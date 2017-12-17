@@ -130,7 +130,7 @@ public class BrainGame extends Game{
 		textPrintFunc(1,x1+20,y0+80,pos);
 		textPrintFunc(2,x0+20,y1+80,pos); 
 		textPrintFunc(3,x1+20,y1+80,pos);
-		font.draw(batch, "seconds " + seconds, 380, 750);
+		font.draw(batch, "Time " + seconds, 380, 750);
 		font.draw(batch, "score  " + score, 380, 700);
 		batch.end();
 		
@@ -143,7 +143,7 @@ public class BrainGame extends Game{
 					score--;
 				status=1;
 				randcolor();
-				alreadyChecked = 0;  
+				alreadyChecked = 0;   
 			}
 		}
 		//click 3
@@ -185,7 +185,16 @@ public class BrainGame extends Game{
 		if(!Gdx.input.isTouched()) {
 			status = 0;  
 		}  
-		checkedTime(seconds);
+		if(seconds <= 0) {
+			shape.begin(ShapeType.Filled);
+			shape.setColor(Color.BLACK); 
+			shape.rect(0, 0, 800, 800);  
+			shape.end(); 
+			batch.begin();
+			font.draw(batch, "Time's out" , 250, 500);
+			font.draw(batch, "score " + score , 250, 600);
+			batch.end();
+		}
 	}  
 	 
 	public void textPrintFunc(int order, int x, int y, int position) {
@@ -201,8 +210,8 @@ public class BrainGame extends Game{
 				font.draw(batch, colorName[newColorName], x, y);
 				alreadyChecked = 1;
 			} 
-			System.out.println("False " + order);
-		} 
+			//System.out.println("False " + order);
+		}  
 	}
 	  
 	public int falseColorName() { 
@@ -221,16 +230,6 @@ public class BrainGame extends Game{
 		return 1;  
 	}
 	
-	public void checkedTime(int seconds) {
-		if(seconds == 0) {
-			System.out.println(".....Time out.... ");
-			shape.begin(ShapeType.Filled);
-			shape.setColor(Color.BLACK); 
-			shape.rect(0, 0, 800, 800); 
-			shape.end();
-			Gdx.app.exit();
-		}
-	}
 	@Override
 	public void dispose () {
 		batch.dispose(); 
