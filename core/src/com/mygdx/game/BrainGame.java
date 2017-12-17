@@ -28,12 +28,12 @@ public class BrainGame extends Game{
 	Color[] listcolor,printColor; 
 	String[] colorName;
 	int[] colorIndex;
-	
+	 
 	String name;
 	Random rand;
 	int x0 = 160, x1 = 320, y0 = 250, y1 = 420, rectSize = 130; 
 	int tmpposlist, pos, status, alreadyChecked,newColorName,score;
-	float totalTime = 10;
+	float totalTime = 30;
 	@Override
 	public void create () {
 		 
@@ -212,14 +212,13 @@ public class BrainGame extends Game{
 		while(check(order)==0) {
 			order = rand.nextInt(listcolor.length);
 		}
-		//System.out.println("order " + order + "index " + colorIndex[order]);
 		return order;
 	} 
 	 
 	public int check(int order) {
 		if(order == colorIndex[0] || order == colorIndex[1] || order == colorIndex[2] || order == colorIndex[3])
 			return 0;
-		return 1; 
+		return 1;  
 	}
 	
 	public void checkedTime(int seconds) {
